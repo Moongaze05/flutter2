@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/chatMessageModel.dart';
 
 class ChatDetailPage extends StatefulWidget{
   @override
@@ -50,6 +51,31 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         ),
       body: Stack(
         children: <Widget>[
+        ListView.builder(
+          itemCount: messages.length,
+          shrinkWrap: true,
+          padding: EdgeInsets.only(top: 10,bottom: 10),
+          // margin: EdgeInsets.only(top:5, bottom:5),
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index){
+            return Container(
+              padding: EdgeInsets.only(left: 14,right: 14,top: 10,bottom: 10),
+              // margin: EdgeInsets.only(top: 2, bottom: 2),
+              // color: Colors.grey.shade200,
+              child: Align(
+                alignment: (messages[index].messageType == "receiver"?Alignment.topLeft:Alignment.topRight),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: (messages[index].messageType  == "receiver"?Colors.grey.shade200:Colors.blue[200]),
+                  ),
+                  padding: EdgeInsets.all(16),
+                  child: Text(messages[index].messageContent, style: TextStyle(fontSize: 15),),
+                ),
+              ),
+            );
+          },
+        ),
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
@@ -57,11 +83,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               height: 60,
               width: double.infinity,
               color: Colors.grey.shade200,
-              margin: EdgeInsets.only(bottom:30),
+              // margin: EdgeInsets.only(bottom:30),
               child: Row(
                 children: <Widget>[
                   GestureDetector(
                     onTap: (){
+                      // прикрепление вложений
                     },
                     child: Container(
                       height: 30,
@@ -85,13 +112,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   ),
                   SizedBox(width: 15,),
                   FloatingActionButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      // отправка сообщения
+                    },
                     child: Icon(Icons.send,color: Colors.white,size: 18,),
                     backgroundColor: Colors.blue,
                     elevation: 0,
                   ),
                 ],
-
               ),
             ),
           ),
@@ -100,3 +128,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     );
   }
 }
+
+List<ChatMessage> messages = [
+  ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
+  ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
+  ChatMessage(messageContent: "Hey Kriss, I am doing fine dude. wbu?", messageType: "sender"),
+  ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+  ChatMessage(messageContent: "Is there any thing wrong?", messageType: "sender"),
+];
